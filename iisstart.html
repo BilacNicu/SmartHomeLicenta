@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>LED Control</title>
+  </head>
+  <body>
+    <h1>LED Control</h1>
+    <p>Current LED Status: <span id="status"></span></p>
+    <button id="toggle-btn">Toggle LED</button>
+    <script>
+      var statusEl = document.getElementById("status");
+      var toggleBtn = document.getElementById("toggle-btn");
+      
+      // Send POST request to toggle LED and update status
+      toggleBtn.addEventListener("click", function() {
+        fetch("/api/values/Hall lights", { method: "POST" })
+          .then(function(response) {
+            return response.json();
+          })
+          .then(function(data) {
+            statusEl.textContent = data.value ? "On" : "Off";
+          })
+          .catch(function(error) {
+            console.error(error);
+          });
+      });
+      
+      // Get initial LED status and display it
+      fetch("/api/values/Hall lights")
+        .then(function(response) {
+          return response.json();
+        })
+        .then(function(data) {
+          statusEl.textContent = data.value ? "On" : "Off";
+        })
+        .catch(function(error) {
+          console.error(error);
+        });
+    </script>
+  </body>
+</html>
